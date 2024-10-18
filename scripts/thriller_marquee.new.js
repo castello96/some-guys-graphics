@@ -39,6 +39,9 @@ function draw() {
 
   noStroke();
 
+  // Draw horizontal neon lines behind the "Palace" text
+  drawHorizontalNeonLines(marqueeX + 20, 170, marqueeWidth - 40, color(14, 152, 118));
+
   // Draw straight pink neon circles overlapping on a straight line
   drawWavyNeon(120, 185, neonLineWidth, color(255, 105, 180)); // Pink neon circles
 
@@ -137,6 +140,16 @@ function drawNeonLine(x1, y1, x2, y2, c) {
   stroke(c); // Draw the bright neon inner line
   strokeWeight(4);
   line(x1, y1, x2, y2);
+}
+
+// Function to draw horizontal neon lines behind the "Palace" text
+function drawHorizontalNeonLines(xStart, yStart, lineWidth, c) {
+  let numLines = 8;
+  let lineSpacing = 10; // Adjust the spacing between lines
+  for (let i = 0; i < numLines; i++) {
+    let y = yStart - i * lineSpacing;
+    drawNeonLine(xStart, y, xStart + lineWidth, y, c);
+  }
 }
 
 // Function to draw overlapping pink neon circles in a straight line
