@@ -21,9 +21,11 @@ const zigzagWidth = 80;
 
 // Fonts
 let fontNeonderthaw;
+let fontBebasNeueu;
 
 function preload(){
   fontNeonderthaw = loadFont('../fonts/Neonderthaw/Neonderthaw-Regular.ttf');
+  fontBebasNeueu = loadFont('../fonts/Bebas_Neue/BebasNeue-Regular.ttf')
 }
 
 function setup() {
@@ -227,13 +229,13 @@ function drawMovieTitlesText() {
 
   // Draw "Some Guys" centered horizontally and slightly above the middle vertically
   fill(19, 74, 130); // Blue-ish color for "Some Guys"
-  textSize(30);
-  text("SOME GUYS", gridCenterX, gridCenterY - 39); // Adjust Y for top text
+  textSize(35);
+  text("SOME GUYS", gridCenterX, gridCenterY - 43); // Adjust Y for top text
 
   // Draw "Thriller" centered horizontally and slightly below the middle vertically
   fill(110, 0, 4); // Red color for "Thriller"
-  textSize(60);
-  text("THRILLER", gridCenterX, gridCenterY + 32); // Adjust Y for bottom text
+  textSize(70);
+  text("THRILLER", gridCenterX, gridCenterY + 15); // Adjust Y for bottom text
 }
 
 
@@ -328,7 +330,7 @@ function drawPalaceText() {
   text("Palace", width / 2, 110);
 
   // Reset font to default or desired font for the rest of the text
-  textFont('sans-serif'); // This resets it to the default font
+  textFont(fontBebasNeueu); // This resets it to the default font
 }
 
 // Function to draw the grid background behind the movie titles
@@ -350,3 +352,10 @@ function drawGridBackground() {
   }
   noStroke();
 }
+
+/**
+ * TODO:
+ * - Fix letter spacing for SOME GUYS and THRILLER
+ * - Improve neon light hue
+ * - Flash the neon lights to add more movement
+ */
