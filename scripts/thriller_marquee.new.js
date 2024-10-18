@@ -19,6 +19,13 @@ const pinkLineY2 = 390;
 const zigzagHeight = 20;
 const zigzagWidth = 80;
 
+// Fonts
+let fontNeonderthaw;
+
+function preload(){
+  fontNeonderthaw = loadFont('../fonts/Neonderthaw/Neonderthaw-Regular.ttf');
+}
+
 function setup() {
   createCanvas(canvasWidth, canvasHeight);
   textAlign(CENTER, CENTER);
@@ -40,7 +47,12 @@ function draw() {
   noStroke();
 
   // Draw horizontal neon lines behind the "Palace" text
-  drawHorizontalNeonLines(marqueeX + 20, 170, marqueeWidth - 40, color(14, 152, 118));
+  drawHorizontalNeonLines(
+    marqueeX + 20,
+    170,
+    marqueeWidth - 40,
+    color(14, 152, 118)
+  );
 
   // Draw straight pink neon circles overlapping on a straight line
   drawWavyNeon(120, 185, neonLineWidth, color(255, 105, 180)); // Pink neon circles
@@ -83,12 +95,7 @@ function draw() {
   drawPalaceText();
 
   // Draw "Some Guys" and "Thriller" in black, centered in the white grid
-  fill(19, 74, 130); // Black text for movie title
-  textSize(30);
-  text("SOME GUYS", width / 2, height / 2 - textYOffset); // Adjusted Y position for centering
-  fill(110, 0, 4); // Red for Thriller
-  textSize(60);
-  text("THRILLER", width / 2, height / 2 + textYOffset); // Adjusted Y position for centering
+  drawMovieTitlesText();
 
   // Draw pink neon bars at the bottom and stop them before reaching the center
   let leftPinkLineStartX = 80;
@@ -128,6 +135,15 @@ function draw() {
   drawZigZagLine(leftPinkLineEndX + 10, zigzagHeight, color(255, 255, 0));
 
   flashState = !flashState; // Toggle lights
+}
+
+function drawMovieTitlesText() {
+  fill(19, 74, 130); // Black text for movie title
+  textSize(30);
+  text("SOME GUYS", width / 2, height / 2 - textYOffset); // Adjusted Y position for centering
+  fill(110, 0, 4); // Red for Thriller
+  textSize(60);
+  text("THRILLER", width / 2, height / 2 + textYOffset); // Adjusted Y position for centering
 }
 
 // Function to draw reusable neon line with an outline to simulate glow
@@ -210,13 +226,18 @@ function drawZigZagLine(xStart, height, c) {
 // Function to draw the "PALACE" neon sign with glow effect
 function drawPalaceText() {
   // Neon glow background for "PALACE"
-  textSize(100);
+  textSize(110);
   fill(neonGlow, 102, 0, 150); // Neon orange with transparency
-  text("PALACE", width / 2, 140);
-
+  textFont(fontNeonderthaw)
+  text("Palace", width / 2, 110);
+  
   // Actual "PALACE" text
+  textSize(105);
   fill(248, 130, 32); // Bright neon orange
-  text("PALACE", width / 2, 140);
+  text("Palace", width / 2, 110);
+
+  // Reset font to default or desired font for the rest of the text
+  textFont('sans-serif'); // This resets it to the default font
 }
 
 // Function to draw the grid background behind the movie titles
