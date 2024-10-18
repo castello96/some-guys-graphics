@@ -6,14 +6,15 @@ function preload() {
 
 let canvasWidth = 600;
 let canvasHeight = 400;
-let imgX = canvasWidth * 0.3;
-let imgY = canvasHeight * 0.3;
-let imgWidth = 200;
+let imgX = canvasWidth * 0.25;
+let imgY = canvasHeight * 0.25;
+let imgWidth = 300;
 let imgHeight = 200;
 let imgTextStartX = imgX + 20;
 let imgTextEndX = imgX + 183;
 let imgTextStartY = imgY + 50;
 let imgTextEndY = imgY + 150;
+let imageBounds = [];
 
 let ghosts = [];
 let numGhosts = 5;
@@ -24,19 +25,38 @@ let numBloodDrops = 3;
 function setup() {
     createCanvas(canvasWidth, canvasHeight);
 
+    imageBounds.push(new ImageBoundaries(0, 120, 135))
+    imageBounds.push(new ImageBoundaries(10, 95, 155))
+    imageBounds.push(new ImageBoundaries(15, 90, 160))
+    imageBounds.push(new ImageBoundaries(20, 35, 165))
+    imageBounds.push(new ImageBoundaries(25, 30, 170))
+    imageBounds.push(new ImageBoundaries(50, 20, 185))
+    imageBounds.push(new ImageBoundaries(100, 68, 148))
+    imageBounds.push(new ImageBoundaries(150, 35, 193))
+    imageBounds.push(new ImageBoundaries(200, 15, 145))
+    imageBounds.push(new ImageBoundaries(250, 22, 125))
+    imageBounds.push(new ImageBoundaries(275, 40, 102))
+    imageBounds.push(new ImageBoundaries(295, 70, 90))
+
+
     for (i = 0; i < numGhosts; i++) {
         let x = int(random(0, canvasWidth));
         let y = int(random(0, canvasHeight));
         ghosts.push(new Ghost(x, y, 50, 100));
     }
 
-    for (i = 0; i < numBloodDrops; i++) {
-        let x = map(i, 0, numBloodDrops, imgTextStartX, imgTextEndX + 30);
-        let y = random(imgTextStartY, imgTextEndY);
-        let speed = 0;
-        let acceleration = random(0.01, 0.1);
-        bloodDrops.push(new BloodDrop(x, y, speed, acceleration));
+    for(bound of imageBounds){
+        let topDrop = new BloodDrop(bound.x, bound.top, 0, .01);
+        bloodDrops.push(topDrop);
     }
+
+    // for (i = 0; i < numBloodDrops; i++) {
+    //     let x = map(i, 0, numBloodDrops, imgTextStartX, imgTextEndX + 30);
+    //     let y = random(imgTextStartY, imgTextEndY);
+    //     let speed = 0;
+    //     let acceleration = random(0.01, 0.1);
+    //     bloodDrops.push(new BloodDrop(x, y, speed, acceleration));
+    // }
 }
 
 // Lightning
@@ -149,8 +169,18 @@ class BloodDrop {
         this.y += this.speed;
 
         if (this.y > canvasHeight) {
-            this.y = imgY + 50;
+            this.y = random(imageBounds).top;
             this.speed = 0;
         }
+    }
+}
+
+class ImageBoundaries {
+    constructor(x, top, bottom){
+        let X_OFFSET = imgX + 2;
+        let Y_OFFSET = imgY;
+        this.x = x + X_OFFSET;
+        this.top = top + Y_OFFSET;
+        this.bottom = bottom + Y_OFFSET;
     }
 }
