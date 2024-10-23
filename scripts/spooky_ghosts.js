@@ -10,7 +10,7 @@ let glowColor = 255;
 
 // Preload the background image and sound effects (if desired)
 function preload() {
-    img = loadImage("./some-guys-1.png"); // Replace with your image URL or local path
+    img = loadImage("./images/some-guys-1.png"); // Replace with your image URL or local path
     // spookySound = loadSound('./spooky-sound.mp3'); // Add your own spooky sound effects
 }
 

@@ -1,7 +1,7 @@
 let someGuysLogo;
 
 function preload() {
-    someGuysLogo = loadImage("./some-guys-1.png");
+    someGuysLogo = loadImage("./images/some-guys-1.png");
 }
 
 let canvasWidth = 600;

@@ -6,7 +6,7 @@ let flickerDirection = -10;
 let mistParticles = [];
 
 function preload() {
-    img = loadImage("./some-guys-1.png"); // Replace with your image URL or local path
+    img = loadImage("./images/some-guys-1.png"); // Replace with your image URL or local path
 }
 
 function setup() {

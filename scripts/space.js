@@ -4,7 +4,7 @@ let numStars = 500;
 let rotationAngle = 0; // Variable to keep track of rotation
 
 function preload() {
-    img = loadImage("./some-guys-1.png"); // Replace with your image URL or local path
+    img = loadImage("./images/some-guys-1.png"); // Replace with your image URL or local path
 }
 
 function setup() {
