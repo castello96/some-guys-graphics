@@ -4,20 +4,24 @@ let neonGlow = 0;
 // Define variables for magic numbers
 const canvasWidth = 700;
 const canvasHeight = 500;
-const marqueeX = 50;
+const marqueeX = 55;
 const marqueeY = 100;
-const marqueeWidth = 600;
+const marqueeWidth = 590;
 const marqueeHeight = 300;
-const neonLineWidth = 540;
 const gridWidth = 540;
 const gridHeight = 175;
 const gridX = 80;
 const gridY = 200;
 const textYOffset = 40;
-const pinkLineY1 = 380;
-const pinkLineY2 = 390;
+const bottomHorizontalPinkLineY1 = 380;
+const bottomHorizontalBlueLineY = 387;
+const bottomHorizontalPinkLineY2 = 395;
 const zigzagHeight = 20;
 const zigzagWidth = 80;
+
+// Neon Lights
+const outerGlowStrokeWeight = 6;
+const innerNeonLightStrokeWeight = 2;
 
 // Fonts
 let fontNeonderthaw;
@@ -49,15 +53,15 @@ function draw() {
 
 
   // Draw horizontal neon lines behind the "Palace" text
-  drawHorizontalNeonLines(
-    marqueeX + 20,
+  drawTopHorizontalNeonLines(
+    gridX,
     170,
-    marqueeWidth - 40,
+    gridWidth,
     color(14, 152, 118)
   );
 
   // Draw straight pink neon circles overlapping on a straight line
-  drawWavyNeon(80, 185, neonLineWidth, color(255, 105, 180)); // Pink neon circles
+  drawWavyNeon(gridX, 185, gridWidth, color(255, 105, 180)); // Pink neon circles
 
   let verticalLineOffset = 20;
   let neonBlue = color(0, 141, 238);
@@ -104,56 +108,70 @@ function draw() {
   drawMovieTitlesText();
 
   // Draw pink neon bars at the bottom and stop them before reaching the center
-  let leftPinkLineStartX = 80;
-  let leftPinkLineEndX = width / 2 - zigzagWidth / 2 - 10; // Distance before center
-  let rightPinkLineStartX = width / 2 + zigzagWidth / 2 + 10;
-  let rightPinkLineEndX = canvasWidth - 80;
+  let leftBottomHorizontalLineStartX = 80;
+  let leftBottomHorizontalLineEndX = width / 2 - zigzagWidth / 2 - 10; // Distance before center
+  let rightBottomHorizontalLineStartX = width / 2 + zigzagWidth / 2 + 10;
+  let rightBottomHorizontalLineEndX = canvasWidth - 80;
   drawNeonLine(
-    leftPinkLineStartX,
-    pinkLineY1,
-    leftPinkLineEndX,
-    pinkLineY1,
+    leftBottomHorizontalLineStartX,
+    bottomHorizontalPinkLineY1,
+    leftBottomHorizontalLineEndX,
+    bottomHorizontalPinkLineY1,
     color(255, 154, 249)
   ); // Bottom pink neon line 1
   drawNeonLine(
-    leftPinkLineStartX,
-    pinkLineY2,
-    leftPinkLineEndX,
-    pinkLineY2,
+    leftBottomHorizontalLineStartX,
+    bottomHorizontalBlueLineY,
+    leftBottomHorizontalLineEndX,
+    bottomHorizontalBlueLineY,
+    neonBlue
+  ); // Bottom middle blue neon line 
+  drawNeonLine(
+    leftBottomHorizontalLineStartX,
+    bottomHorizontalPinkLineY2,
+    leftBottomHorizontalLineEndX,
+    bottomHorizontalPinkLineY2,
     color(255, 154, 249)
   ); // Bottom pink neon line 2
   drawNeonLine(
-    rightPinkLineStartX,
-    pinkLineY1,
-    rightPinkLineEndX,
-    pinkLineY1,
+    rightBottomHorizontalLineStartX,
+    bottomHorizontalPinkLineY1,
+    rightBottomHorizontalLineEndX,
+    bottomHorizontalPinkLineY1,
     color(255, 154, 249)
   ); // Bottom pink neon line 1
   drawNeonLine(
-    rightPinkLineStartX,
-    pinkLineY2,
-    rightPinkLineEndX,
-    pinkLineY2,
+    rightBottomHorizontalLineStartX,
+    bottomHorizontalBlueLineY,
+    rightBottomHorizontalLineEndX,
+    bottomHorizontalBlueLineY,
+    neonBlue
+  ); // Bottom middle blue neon line 
+  drawNeonLine(
+    rightBottomHorizontalLineStartX,
+    bottomHorizontalPinkLineY2,
+    rightBottomHorizontalLineEndX,
+    bottomHorizontalPinkLineY2,
     color(255, 154, 249)
   ); // Bottom pink neon line 1
   
   // Draw yellow zigzag neon line in the center
-  drawZigZagLine(leftPinkLineEndX + 10, zigzagHeight, color(255, 255, 0));
+  drawZigZagLine(leftBottomHorizontalLineEndX + 10, zigzagHeight, color(255, 255, 0));
   
 
   flashState = !flashState; // Toggle lights
 }
 
 function drawFlashingBulbs() {
-  let bulbWidth = 20; // Width of the bulbs (oblong shape)
+  let bulbWidth = 15; // Width of the bulbs (oblong shape)
   let bulbHeight = 10; // Height of the bulbs (oblong shape)
   let numBulbs = 18; // Number of bulbs to line the bottom
-  let bulbSpacing = marqueeWidth / numBulbs; // Spacing between bulbs
+  let bulbSpacing = gridWidth / numBulbs; // Spacing between bulbs
   let bulbY = marqueeY + marqueeHeight; // Y position just below the marquee
 
   // Loop to draw bulbs along the bottom
   for (let i = 0; i < numBulbs; i++) {
-    let x = marqueeX + 20 + i * bulbSpacing; // X position of each bulb
+    let x = gridX + 15 + i * bulbSpacing; // X position of each bulb
 
     // Flashing effect: alternate colors based on the flashState
     if (flashState) {
@@ -194,13 +212,13 @@ function drawYellowNeonRectangles() {
 
     // Outer glow layer (soft glow effect)
     stroke(255, 255, 0, 150); // Soft yellow glow
-    strokeWeight(5); // Outer glow stroke weight
+    strokeWeight(outerGlowStrokeWeight); // Outer glow stroke weight
     noFill();
     rect(leftRectX, y, rectWidth, rectHeight, cornerRadius);
 
     // Core neon layer (bright yellow rectangle)
     stroke(255, 255, 0); // Bright yellow stroke for the core
-    strokeWeight(1); // Inner core stroke weight
+    strokeWeight(innerNeonLightStrokeWeight); // Inner core stroke weight
     fill(255, 255, 0, 100); // Slightly transparent yellow fill
     rect(leftRectX, y, rectWidth, rectHeight, cornerRadius);
   }
@@ -211,13 +229,13 @@ function drawYellowNeonRectangles() {
 
     // Outer glow layer (soft glow effect)
     stroke(255, 255, 0, 150); // Soft yellow glow
-    strokeWeight(5); // Outer glow stroke weight
+    strokeWeight(outerGlowStrokeWeight); // Outer glow stroke weight
     noFill();
     rect(rightRectX, y, rectWidth, rectHeight, cornerRadius);
 
     // Core neon layer (bright yellow rectangle)
     stroke(255, 255, 0); // Bright yellow stroke for the core
-    strokeWeight(1); // Inner core stroke weight
+    strokeWeight(innerNeonLightStrokeWeight); // Inner core stroke weight
     fill(255, 255, 0, 100); // Slightly transparent yellow fill
     rect(rightRectX, y, rectWidth, rectHeight, cornerRadius);
   }
@@ -226,6 +244,9 @@ function drawYellowNeonRectangles() {
 function drawMovieTitlesText() {
   let gridCenterX = gridX + gridWidth / 2; // X position: center of the grid
   let gridCenterY = gridY + gridHeight / 2; // Y position: middle of the grid
+
+  // Reset font to default or desired font for the rest of the text
+  textFont(fontBebasNeueu); // This resets it to the default font
 
   // Draw "Some Guys" centered horizontally and slightly above the middle vertically
   fill(19, 74, 130); // Blue-ish color for "Some Guys"
@@ -241,18 +262,18 @@ function drawMovieTitlesText() {
 
 // Function to draw reusable neon line with an outline to simulate glow
 function drawNeonLine(x1, y1, x2, y2, c) {
-  let glowColor = lerpColor(c, color(0), 0.6); // Darker shade for glow
+  let glowColor = lerpColor(c, color(0), 0.5); // Darker shade for glow
   stroke(glowColor); // Draw outer glow first
-  strokeWeight(10);
+  strokeWeight(outerGlowStrokeWeight);
   line(x1, y1, x2, y2);
 
   stroke(c); // Draw the bright neon inner line
-  strokeWeight(3);
+  strokeWeight(innerNeonLightStrokeWeight);
   line(x1, y1, x2, y2);
 }
 
 // Function to draw horizontal neon lines behind the "Palace" text
-function drawHorizontalNeonLines(xStart, yStart, lineWidth, c) {
+function drawTopHorizontalNeonLines(xStart, yStart, lineWidth, c) {
   let numLines = 8;
   let lineSpacing = 10; // Adjust the spacing between lines
   for (let i = 0; i < numLines; i++) {
@@ -267,8 +288,8 @@ function drawWavyNeon(xStart, yStart, waveWidth, c) {
   let circleSpacing = waveWidth / numCircles;
 
   noFill();
-  stroke(lerpColor(c, color(0), 0.6)); // Darker shade for the outer glow
-  strokeWeight(6); // Outer glow weight
+  stroke(lerpColor(c, color(0), 0.5)); // Darker shade for the outer glow
+  strokeWeight(outerGlowStrokeWeight); // Outer glow weight
 
   // Draw outer glow circles in a straight line
   for (let i = 0; i <= numCircles; i++) {
@@ -278,7 +299,7 @@ function drawWavyNeon(xStart, yStart, waveWidth, c) {
   }
 
   stroke(c); // Bright pink neon
-  strokeWeight(2); // Inner neon line
+  strokeWeight(innerNeonLightStrokeWeight); // Inner neon line
 
   // Draw bright neon circles in a straight line
   for (let i = 0; i <= numCircles; i++) {
@@ -292,11 +313,11 @@ function drawWavyNeon(xStart, yStart, waveWidth, c) {
 function drawZigZagLine(xStart, height, c) {
   let segments = 6;
   let segmentWidth = zigzagWidth / segments;
-  let zigZagTop = pinkLineY1;
-  let zigZagBottom = pinkLineY2;
+  let zigZagTop = bottomHorizontalPinkLineY1;
+  let zigZagBottom = bottomHorizontalPinkLineY2;
 
   stroke(c);
-  strokeWeight(4);
+  strokeWeight(innerNeonLightStrokeWeight);
 
   let currentX;
   for (let i = 0; i < segments; i++) {
@@ -325,12 +346,9 @@ function drawPalaceText() {
   text("Palace", width / 2, 110);
   
   // Actual "PALACE" text
-  textSize(105);
+  textSize(107);
   fill(248, 130, 32); // Bright neon orange
   text("Palace", width / 2, 110);
-
-  // Reset font to default or desired font for the rest of the text
-  textFont(fontBebasNeueu); // This resets it to the default font
 }
 
 // Function to draw the grid background behind the movie titles
@@ -353,9 +371,23 @@ function drawGridBackground() {
   noStroke();
 }
 
+function drawTitlesWithLetterSpacing(text, x, y, spacing) {
+  // Loop through each character in the string
+  for (let i = 0; i < text.length; i++) {
+    let letter = text[i];
+    
+    // Draw each letter and adjust its X position based on the custom spacing
+    text(letter, x, y);
+    
+    // Move the X position forward by the width of the letter + custom spacing
+    x += textWidth(letter) + spacing;
+  }
+}
+
 /**
  * TODO:
  * - Fix letter spacing for SOME GUYS and THRILLER
  * - Improve neon light hue
  * - Flash the neon lights to add more movement
+ * - Stagger the flashing bulbs
  */
