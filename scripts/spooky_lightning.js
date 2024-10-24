@@ -24,42 +24,38 @@ let numGhosts = 5;
 let bloodDrops = [];
 
 function setup() {
-  createCanvas(canvasWidth, canvasHeight);
-
-  imageBounds.push(new ImageBoundaries(0, 120, 135, -1));
-  imageBounds.push(new ImageBoundaries(10, 95, 155, -1));
-  imageBounds.push(new ImageBoundaries(15, 90, 160, -1));
-  imageBounds.push(new ImageBoundaries(20, 35, 165, -1));
-  imageBounds.push(new ImageBoundaries(25, 30, 170, -1));
-  imageBounds.push(new ImageBoundaries(50, 20, 185, -1));
-  imageBounds.push(new ImageBoundaries(100, 68, 148, 1));
-  imageBounds.push(new ImageBoundaries(150, 35, 193, 0));
-  imageBounds.push(new ImageBoundaries(200, 15, 145, 1));
-  imageBounds.push(new ImageBoundaries(250, 22, 125, 1));
-  imageBounds.push(new ImageBoundaries(275, 40, 102, 0));
-  imageBounds.push(new ImageBoundaries(295, 70, 90, 1));
-
-  for (bound of imageBounds) {
-    let drop = new BloodDrop(bound, 0, random(0.005, 0.02));
-    bloodDrops.push(drop);
-  }
-
-  for (i = 0; i < numGhosts; i++) {
-    let x = int(random(0, canvasWidth));
-    let y = int(random(0, canvasHeight));
-    let z = int(random(0, 500));
-    ghosts.push(new Ghost(x, y, z, 100, 100, ghostImage));
-  }
-}
-
-function mousePressed() {
-  console.log("Mouse clicked at: " + mouseX + ", " + mouseY);
+    createCanvas(canvasWidth, canvasHeight);
+    
+    imageBounds.push(new ImageBoundaries(0, 120, 135, -1));
+      imageBounds.push(new ImageBoundaries(10, 95, 155, -1));
+      imageBounds.push(new ImageBoundaries(15, 90, 160, -1));
+      imageBounds.push(new ImageBoundaries(20, 35, 165, -1));
+      imageBounds.push(new ImageBoundaries(25, 30, 170, -1));
+      imageBounds.push(new ImageBoundaries(50, 20, 185, -1));
+      imageBounds.push(new ImageBoundaries(100, 68, 148, 1));
+      imageBounds.push(new ImageBoundaries(150, 35, 193, 0));
+      imageBounds.push(new ImageBoundaries(200, 15, 145, 1));
+      imageBounds.push(new ImageBoundaries(250, 22, 125, 1));
+      imageBounds.push(new ImageBoundaries(275, 40, 102, 0));
+      imageBounds.push(new ImageBoundaries(295, 70, 90, 1));
+    
+    for (bound of imageBounds) {
+        let drop = new BloodDrop(bound, 0, random(0.0025, 0.01));
+        bloodDrops.push(drop);
+    }
+    
+    for (i = 0; i < numGhosts; i++) {
+        let x = int(random(0, canvasWidth));
+        let y = int(random(0, canvasHeight));
+        let z = int(random(0, 500));
+        ghosts.push(new Ghost(x, y, z, 100, 100, ghostImage));
+    }
 }
 
 // Lightning
 let lightingFrequencyInFrames = 200;
 let lightningFlash = false;
-let lightningDuration = 200;
+let lightningDuration = 30;
 let lightningTimer = 0;
 
 function draw() {
@@ -72,6 +68,7 @@ function draw() {
     if (lightningTimer > lightningDuration) {
       lightningFlash = false;
       lightningTimer = 0;
+      lightingFrequencyInFrames = int(random(100, 1000));
     }
   }
 
@@ -158,12 +155,13 @@ class Ghost {
 }
 
 class BloodDrop {
-  constructor(boundary, speed, acceleration, swayDirection) {
+  constructor(boundary, speed, acceleration) {
     this.boundary = boundary; // Store the boundary
     this.x = boundary.x;
     this.y = boundary.top;
     this.speed = speed;
-    this.acceleration = acceleration;
+    this.originalAcceleration = acceleration;
+    this.currentAcceleration = acceleration;
     this.stuck = false; // Whether the drop is "hanging" at the bottom
     this.swayDirection = -1 * boundary.bottomSlope; // Direction for swaying (left or right)
     this.swayAmount = 0; // How much the drop sways
@@ -175,7 +173,7 @@ class BloodDrop {
   display() {
     if (this.isFalling && !this.hasFallenOff) {
       // If falling, apply acceleration and make the drop move down
-      this.speed += this.acceleration;
+      this.speed += this.currentAcceleration;
       this.y += this.speed;
 
       // Check if the drop hits the bottom of the boundary
@@ -204,7 +202,7 @@ class BloodDrop {
 
     // If the drop has fallen off, apply acceleration and continue falling
     if (this.isFalling && this.hasFallenOff) {
-      this.speed += this.acceleration;
+      this.speed += (this.currentAcceleration * 10);
       this.y += this.speed;
     }
 
@@ -231,6 +229,7 @@ class BloodDrop {
       this.hasFallenOff = false; // Reset fall status
       this.hangTime = 15; // Reset hang time
       this.swayAmount = 0; // Reset sway
+      this.currentAcceleration = this.originalAcceleration;
     }
   }
 }
