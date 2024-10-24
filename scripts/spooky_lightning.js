@@ -23,6 +23,9 @@ let numGhosts = 5;
 
 let bloodDrops = [];
 
+let blinkingEyes = [];
+let numBlinkingEyes = 5;
+
 function setup() {
     createCanvas(canvasWidth, canvasHeight);
     
@@ -49,6 +52,10 @@ function setup() {
         let y = int(random(0, canvasHeight));
         let z = int(random(0, 500));
         ghosts.push(new Ghost(x, y, z, 100, 100, ghostImage));
+    }
+
+    for( let i = 0; i < numBlinkingEyes; i++){
+        blinkingEyes.push(new BlinkingEyes());
     }
 }
 
@@ -79,6 +86,7 @@ function draw() {
   }
 
   drawBlood();
+  drawBlinkingEyes();
 }
 
 function drawLightning(lightningTimer) {
@@ -104,6 +112,12 @@ function repositionGhosts() {
 function drawBlood() {
   for (bloodDrop of bloodDrops) {
     bloodDrop.display();
+  }
+}
+
+function drawBlinkingEyes() {
+  for (eyes of blinkingEyes) {
+    eyes.display();
   }
 }
 
@@ -244,3 +258,52 @@ class ImageBoundaries {
     this.bottomSlope = bottomSlope;
   }
 }
+
+class BlinkingEyes {
+    constructor() {
+      this.blinkInterval = int(random(30, 120)); // Random blink interval for each pair of eyes
+      this.blinkDuration = int(random(5, 20)); // Random blink duration
+      this.eyeOpen = random[true, false];
+      this.blinkTimer = 0;
+
+      // Create 4 zones where eyes can appear
+      const topRow = {x: 0, y: 0, width: canvasWidth, height: imgY};
+      const bottomRow = {x: 0, y: imgY + imgHeight, width: canvasWidth, height: canvasHeight};
+      const leftColumn = {x: 0, y: 0, width: imgX, height: canvasHeight}
+      const rightColumn = {x: imgX + imgWidth, y: 0, width: canvasWidth, height: canvasHeight}
+
+      const zone = random([topRow, bottomRow, leftColumn, rightColumn]);
+
+      this.eyePositionX = random(zone.x, zone.width);
+      this.eyePositionY = random(zone.y, zone.height);
+  
+      // Random z-scale effect for size differences
+      const Z_MIN = 1;
+      const Z_MAX = 100;
+      this.z = random(Z_MIN, Z_MAX);
+      this.scaleFactor = map(this.z, Z_MIN, Z_MAX, 1, 0.25); // Larger eyes are closer, smaller eyes are farther
+    }
+  
+    display() {
+        console.log(JSON.stringify(this,null,2))
+      this.blinkTimer++;
+      if (this.blinkTimer % this.blinkInterval == 0) {
+        this.eyeOpen = !this.eyeOpen; // Toggle between open and closed
+        this.blinkTimer = 0;
+      }
+  
+      if (this.eyeOpen) {
+        // Draw yellow eyes
+        fill(255, 255, 0); // Yellow eyes
+        ellipse(this.eyePositionX - 10 * this.scaleFactor, this.eyePositionY, 15 * this.scaleFactor, 10 * this.scaleFactor); // Left eye
+        ellipse(this.eyePositionX + 10 * this.scaleFactor, this.eyePositionY, 15 * this.scaleFactor, 10 * this.scaleFactor); // Right eye
+  
+        // Draw pupils
+        fill(0);
+        ellipse(this.eyePositionX - 10 * this.scaleFactor, this.eyePositionY, 5 * this.scaleFactor, 5 * this.scaleFactor); // Left pupil
+        ellipse(this.eyePositionX + 10 * this.scaleFactor, this.eyePositionY, 5 * this.scaleFactor, 5 * this.scaleFactor); // Right pupil
+      } else {
+        // Eyes are closed (no drawing)
+      }
+    }
+  }
